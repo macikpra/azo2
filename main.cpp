@@ -5,7 +5,7 @@
 #include <string>
 #include <chrono>
 #include <iomanip>
-#include <graph.h>
+#include "graph.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -21,19 +21,17 @@ void clearScreen() {
 
 // Menu główne programu
 void menu() {
-    int vertices = 0;
     Graph* graph = nullptr;
 
     while (true) {
         clearScreen();
         cout << "=== PROGRAM DO ALGORYTMÓW MST ===" << endl;
-        cout << "1. Utwórz nowy graf" << endl;
-        cout << "2. Wczytaj graf z pliku" << endl;
-        cout << "3. Wygeneruj losowy graf" << endl;
-        cout << "4. Wyświetl graf" << endl;
-        cout << "5. Algorytm Prima (macierzowo i listowo)" << endl;
-        cout << "6. Algorytm Kruskala (macierzowo i listowo)" << endl;
-        cout << "7. Testy wydajności" << endl;
+        cout << "1. Wczytaj graf z pliku" << endl;
+        cout << "2. Wygeneruj losowy graf" << endl;
+        cout << "3. Wyświetl graf" << endl;
+        cout << "4. Algorytm Prima (macierzowo i listowo)" << endl;
+        cout << "5. Algorytm Kruskala (macierzowo i listowo)" << endl;
+        //cout << "6. Testy wydajności" << endl;
         cout << "0. Wyjście" << endl;
         cout << "Wybierz opcję: ";
 
@@ -46,21 +44,23 @@ void menu() {
                 return;
             }
             case 1: {
-                cout << "Podaj liczbę wierzchołków: ";
-                cin >> vertices;
-                if (graph) delete graph;
-                graph = new Graph(vertices);
-                cout << "Utworzono nowy graf o " << vertices << " wierzchołkach." << endl;
-                break;
-            }
-            case 2: {
-                if (!graph) {
-                    cout << "Najpierw utwórz graf!" << endl;
-                    break;
-                }
                 string filename;
                 cout << "Podaj nazwę pliku: ";
                 cin >> filename;
+                
+                ifstream file(filename);
+                if (!file.is_open()) {
+                    cout << "Nie można otworzyć pliku " << filename << endl;
+                    break;
+                }
+                
+                int edges, vertices;
+                file >> edges >> vertices;
+                file.close();
+                
+                if (graph) delete graph;
+                graph = new Graph(vertices);
+                
                 if (graph->loadFromFile(filename)) {
                     cout << "Graf wczytany z pliku." << endl;
                     // Wyświetl graf
@@ -70,21 +70,35 @@ void menu() {
                 }
                 break;
             }
-            case 3: {
-                if (!graph) {
-                    cout << "Najpierw utwórz graf!" << endl;
-                    break;
-                }
+            case 2: {
+                int vertices;
                 double density;
+                cout << "Podaj liczbę wierzchołków: ";
+                cin >> vertices;
                 cout << "Podaj gęstość grafu (0.0-1.0): ";
                 cin >> density;
+                
                 if (density < 0.0 || density > 1.0) {
                     cout << "Nieprawidłowa gęstość. Podaj wartość z zakresu 0.0-1.0." << endl;
                     break;
                 }
+                
+                if (graph) delete graph;
+                graph = new Graph(vertices);
                 graph->generateRandom(density);
-                cout << "Wygenerowano losowy graf o gęstości " << density << endl;
+                
+                cout << "Wygenerowano losowy graf o " << vertices << " wierzchołkach i gęstości " << density << endl;
                 // Wyświetl graf
+                graph->displayMatrix();
+                cout << endl;
+                graph->displayList();
+                break;
+            }
+            case 3: {
+                if (!graph) {
+                    cout << "Najpierw wczytaj lub wygeneruj graf!" << endl;
+                    break;
+                }
                 graph->displayMatrix();
                 cout << endl;
                 graph->displayList();
@@ -92,33 +106,23 @@ void menu() {
             }
             case 4: {
                 if (!graph) {
-                    cout << "Najpierw utwórz graf!" << endl;
-                    break;
-                }
-                graph->displayMatrix();
-                cout << endl;
-                graph->displayList();
-                break;
-            }
-            case 5: {
-                if (!graph) {
-                    cout << "Najpierw utwórz graf!" << endl;
+                    cout << "Najpierw wczytaj lub wygeneruj graf!" << endl;
                     break;
                 }
                 graph->primMST_Matrix();
                 graph->primMST_List();
                 break;
             }
-            case 6: {
+            case 5: {
                 if (!graph) {
-                    cout << "Najpierw utwórz graf!" << endl;
+                    cout << "Najpierw wczytaj lub wygeneruj graf!" << endl;
                     break;
                 }
                 graph->kruskalMST_Matrix();
                 graph->kruskalMST_List();
                 break;
             }
-            case 7: {
+            case 6: {
                 cout << "Testy wydajności:" << endl;
                 cout << "1. Test dla pojedynczego rozmiaru grafu" << endl;
                 cout << "2. Pełne testy (7 rozmiarów x 3 gęstości x 50 instancji)" << endl;
