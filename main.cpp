@@ -25,7 +25,7 @@ void menu() {
 
     while (true) {
         clearScreen();
-        cout << "=== PROGRAM DO ALGORYTMÓW MST ===" << endl;
+        cout << "=== PROGRAM DO ALGORYTMÓW GRAFOWYCH ===" << endl;
         cout << "1. Wczytaj graf z pliku" << endl;
         cout << "2. Wygeneruj losowy graf" << endl;
         cout << "3. Wyświetl graf" << endl;
