@@ -290,7 +290,7 @@ public:
                 }
             }
             
-            // Jeśli nie znaleziono wierzchołka (graf rozłączny)
+            // Jeśli nie znaleziono wierzchołka (graf rozłączny, raczej nie powinno się wydarzyć)
             if (u == -1) break;
             
             mstSet[u] = true; // Dodaj do MST
@@ -350,7 +350,7 @@ public:
                 }
             }
             
-            // Jeśli nie znaleziono wierzchołka (graf rozłączny)
+            // // Jeśli nie znaleziono wierzchołka (graf rozłączny, raczej nie powinno się wydarzyć)
             if (u == -1) break;
             
             mstSet[u] = true; // Dodaj do MST
