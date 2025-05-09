@@ -401,20 +401,26 @@ public:
     };
 
     // Funkcje pomocnicze dla algorytmu Kruskala
+
+    // Znajduje reprezentanta zbioru, do którego należy element i
     int find(Subset subsets[], int i) {
+        // Jeżeli i nie jest własnym rodzicem, szukaj rekurencyjnie reprezentanta zbioru
         if (subsets[i].parent != i)
-            subsets[i].parent = find(subsets, subsets[i].parent);
+            subsets[i].parent = find(subsets, subsets[i].parent); // Path compression
         return subsets[i].parent;
     }
 
     void Union(Subset subsets[], int x, int y) {
+        // Znalezienie reprezentantów zbiorów
         int rootX = find(subsets, x);
         int rootY = find(subsets, y);
 
+        // Łączy mniejszy zbiór z większym - porównujemy wysokość drzewa
         if (subsets[rootX].rank < subsets[rootY].rank)
             subsets[rootX].parent = rootY;
         else if (subsets[rootX].rank > subsets[rootY].rank)
             subsets[rootY].parent = rootX;
+        // Jeśli równe wybieramy rootX i zwiększamy jego rangę
         else {
             subsets[rootY].parent = rootX;
             subsets[rootX].rank++;
