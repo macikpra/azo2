@@ -261,7 +261,7 @@ public:
     }
 
     // Algorytm Prima - wersja macierzowa
-    void primMST_Matrix() {
+    void primMST_Matrix() { // TODO: Zastosować kolejkę priorytetową
         cout << "\nWyniki algorytmu Prima (macierzowo):" << endl;
         
         int* parent = new int[V]; // Tablica przechowująca MST
@@ -428,7 +428,7 @@ public:
     }
 
     // Algorytm Kruskala - wersja macierzowa
-    void kruskalMST_Matrix() {
+    void kruskalMST_Matrix() { // TODO: Zaimplementować kopiec
         cout << "\nWyniki algorytmu Kruskala (macierzowo):" << endl;
         
         // Utwórz tablicę krawędzi
